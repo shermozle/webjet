@@ -36,6 +36,8 @@ Every business event follows a real SDK experiment evaluation and exposure for t
 
 The first complete local live verification received acknowledgements for 20 exposure users and all 41 business events, with 10 users in each arm. An earlier launch-propagation attempt stopped after two users; it was not replayed. The generator now retries evaluation without exposure logging until a valid assignment is available, and refuses to invent assignments.
 
+The [first full GitHub Actions run](https://github.com/shermozle/webjet/actions/runs/45088626010) succeeded on 23 November at 11:25 AEDT: 120 exposure users and all 203 business events acknowledged (48 Control, 72 Test). This small first cohort is not an analysis result; the workflow is confirmed active.
+
 Each workflow run publishes a JSON receipt and job summary containing assignments, simulated conversions and **acknowledged** event counts. These are delivery checks, not Statsig's statistical results. Any delivery mismatch fails the job. The normal schedule sends new cohorts; rerunning the same GitHub run is deliberately skipped to avoid duplicate partial delivery. Use **Run workflow** for a new manual batch (1–240 users) if needed.
 
 The workflow uses the existing public client SDK key and GitHub's built-in workflow token. No Statsig server/console key is required. To stop early, disable the workflow in GitHub Actions. To change the deadline or volume, edit `data/statsig-synthetic-config.json` and commit; after automatic disablement, explicitly re-enable the workflow. Local execution defaults to a dry run:

@@ -24,7 +24,7 @@ Direct presenter links:
 - `?page=home&experimentProvider=statsig`
 - `?page=home&experimentProvider=amplitude`
 
-Set the Amplitude visual editor starting URL to the second link (using the actual localhost or deployed origin). Local rehearsal controls should remain at defaults when demonstrating either provider.
+The existing Amplitude draft now uses the deployed Amplitude-mode landing URL as its visual editor starting URL and exact page-targeting rule. Local rehearsal controls should remain at defaults when demonstrating either provider.
 
 Amplitude Session Replay and Guides & Surveys are available under SDK settings. Amplitude QA activity is tagged; local forced QA precision events are excluded from Statsig. The historical Amplitude upload remains stopped.
 
