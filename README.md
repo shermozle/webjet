@@ -1,6 +1,8 @@
 # Webjet demo — Statsig + Amplitude
 
-A static React + TypeScript site inspired by Webjet, with a complete mocked flight booking journey. Runs on GitHub Pages; no backend, real payment or authentication.
+A static React + TypeScript site inspired by Webjet, with a complete mocked flight booking journey. Live at **https://shermozle.github.io/webjet/**; no backend, real payment or authentication.
+
+Friday’s separate synthetic experiment and 15-minute traffic schedule are documented in [synthetic traffic](docs/synthetic-traffic.md).
 
 ## Run
 
@@ -30,18 +32,18 @@ Amplitude Session Replay and Guides & Surveys are available under SDK settings. 
 
 1. The site defaults to **[SR] Webjet** using its existing public client SDK key, retrieved from the signed-in console. The MCP connector remains scoped to read-only Amplitronics; that project was not modified.
 2. Enter the project's **public client SDK key** in Demo → SDK and reload. Alternatively set `VITE_STATSIG_CLIENT_KEY` in `.env.local` before building. Browser settings override build defaults if previously saved; reset the demo to adopt a new build default.
-3. The draft `webjet_landing_confidence` is created with `banner: "control"` and `banner: "value"` parameters in its two 50/50 groups, using userID. Add the conversion metrics, configure eligibility and start it in the console when ready.
+3. `webjet_landing_confidence` is active, with `banner: "control"` and `banner: "value"` parameters in two 50/50 groups, using userID. Checkout conversion is primary; booking conversion and payment failure rate are secondary. All three use unique-user, one-time-event rollups.
 4. Return all local rehearsal controls to defaults: automatic banner, draft/paused local status, MVT off, personalisation off, automatic holdback. These local overrides intentionally suppress experiment evaluations and precision events to Statsig.
 5. Visit the landing page, search, choose a flight, add optional extras and complete checkout. Check Statsig's events/exposure tools to verify receipt. “Queued” in the local inspector is not a delivery receipt.
 6. Keep the exact event names: `Checkout Started`, `Booking Completed`, `Payment Failed`. Booking Completed includes numeric event value for simulated revenue plus metadata.
 
-The Webjet project and successful browser SDK initialization were verified. The browser inspector shows Statsig automatic page/session events alongside Amplitude pageviews. Server-side event receipt and experiment results must be verified separately.
+Verified on the published site: real Statsig Control assignment (`Network:Recognized`), automatic SDK events, Amplitude Web Experiment script loading in Amplitude mode, and receipt of checkout, booking and payment-failure events in Statsig. Business events flush before full-page navigation.
 
 ## Data timing and presentation
 
 Statsig Cloud does not ordinarily backfill already-computed historical metric days. Send events with their actual occurrence times. The first 24 hours of a new Cloud experiment have hourly scorecard calculations, but this is not an immediate-result promise or a completed result.
 
-For an urgent demo, show the live Webjet setup/journey and use an existing, clearly identified Statsig example to explain results. Warehouse Native is an alternative for historical synthetic data if an appropriate warehouse/project is available.
+A separate active experiment, `webjet_friday_synthetic_checkout`, receives clearly labelled synthetic visitors through GitHub Actions every 15 minutes until Thursday 26 November, 18:00 Sydney time. Its intended scenario is 20% versus 22% checkout conversion. Review Statsig’s computed results on Friday 27 November; significance and processing time are not guaranteed. See [traffic controls and results guidance](docs/synthetic-traffic.md).
 
 The older Amplitude/TurboDemo assets remain in `data/` and `scripts/` for reuse. They are **not Statsig import formats**. The Amplitude upload was stopped on the pivot; the checkpoint records 78,400 accepted events. The batch is incomplete and the draft Amplitude experiment was not completed. Do not resume `scripts/backfill.mjs --send` for this Statsig demo.
 
@@ -56,7 +58,7 @@ npm run build
 npm run preview
 ```
 
-`dist/` is the deployment artifact. A Pages workflow is included in `.github/workflows/pages.yml`: push this project to a GitHub repository with a `main` branch and choose **GitHub Actions** as its Pages source. The workflow builds and deploys automatically. No repository or public deployment has been created by this task.
+`dist/` is the deployment artifact. The public repository is https://github.com/shermozle/webjet. GitHub Pages uses the Actions workflow in `.github/workflows/pages.yml`; pushes to `main` build, test and deploy automatically. The deployed site is https://shermozle.github.io/webjet/.
 
 For a build-time key in GitHub Actions, supply `VITE_STATSIG_CLIENT_KEY` as an environment variable on the build step; a public client key is safe in browser code. The current workflow also works without it, allowing the presenter to enter it in Demo → SDK.
 
@@ -65,7 +67,7 @@ Routes use `?page=...`, so direct links and refreshes work under a repository su
 ## Validation
 
 - `npm run build`: TypeScript + production build.
-- `npm test`: deterministic legacy data generation checks.
+- `npm test`: six deterministic checks covering legacy generation, synthetic funnel ordering, intended lift, identity, labels and the traffic deadline.
 - `npm run data:generate`: validates and regenerates TurboDemo CSV and mapping.
 - Browser verified: flight search → selection → checkout → simulated decline → success; booking survives refresh; forced B updates the landing banner.
 

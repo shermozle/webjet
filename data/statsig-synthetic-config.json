@@ -1,0 +1,12 @@
+{
+  "projectId": "bmtCqNq6OmrkbDSTAL4tI",
+  "clientKey": "client-jLacRLWfl6U2EZ5OkndFwsjhtEYf8u1vaD4Lm6MoSk2",
+  "experiment": "webjet_friday_synthetic_checkout",
+  "usersPerRun": 120,
+  "maxUsersPerRun": 240,
+  "stopAt": "2026-11-26T18:00:00+11:00",
+  "reviewAt": "2026-11-27T09:00:00+11:00",
+  "siteUrl": "https://shermozle.github.io/webjet/",
+  "source": "github_actions_synthetic",
+  "label": "Synthetic demo outcomes; not Webjet customer evidence"
+}

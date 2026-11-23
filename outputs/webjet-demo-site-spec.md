@@ -80,7 +80,7 @@ The official web-analytics plugin owns pageviews and sessions. Its filter allows
 
 Precision metadata includes page_name, product_type, origin, destination, trip_type, travellers and currency, plus action-specific properties. Booking Completed uses numeric revenue as the Statsig event value. All metadata values are serialized as strings.
 
-The event inspector distinguishes local-only from queued delivery. It is not a receipt. Real delivery and exposure must be verified in Statsig after a valid key is supplied.
+The event inspector distinguishes local-only from queued delivery. It is not a receipt. Real assignment and business-event receipt have been verified in Statsig; the local inspector alone is not proof of delivery.
 
 ## Precision events
 
@@ -150,12 +150,12 @@ Statsig Cloud historical metric backfill is not a standard capability. For the u
 
 Completed: TypeScript compile, production build, legacy deterministic data tests, browser flight booking and persistence, decline recovery, forced banner change, Statsig settings UI.
 
-Verified: Webjet public client key, Statsig initialization, both SDKs generating automatic events, Amplitude Web Experiment script in Amplitude mode, saved Statsig two-group draft. Not verified: server receipt, active real assignment, lifecycle controls, live MVT/holdout, historical results, published Pages deployment. Mobile CSS is implemented; the browser viewport override did not change the observed viewport, so mobile visual verification remains outstanding.
+Verified: Webjet public client key, Statsig initialization, automatic events from both SDKs, Amplitude Web Experiment script in Amplitude mode, active Statsig banner experiment and real Control assignment, conversion-event receipt, three configured metrics and published GitHub Pages deployment. A separate synthetic experiment is active with a bounded 15-minute traffic workflow. Not verified: future experiment results, live MVT/holdout or pause/resume. Mobile CSS is implemented; the browser viewport override did not change the observed viewport, so mobile visual verification remains outstanding.
 
 ## Build sequence and scope
 
 Implemented in order: local state and mock inventory; landing/search; comparison/extras; checkout/confirmation; account/catalogue/support; precision taxonomy and original analytics; local demo controls; GitHub Pages workflow; Statsig adapter pivot and runbook.
 
-Remaining connection sequence: add metrics to the saved Statsig banner draft → start experiment → verify real exposures and checkout events → publish Pages repository if requested → rehearse with a prepared results example.
+Deployment: https://shermozle.github.io/webjet/. Interactive experiment: webjet_landing_confidence. Friday synthetic experiment: webjet_friday_synthetic_checkout. Review docs/synthetic-traffic.md before presenting its results.
 
 Out of scope: real travel inventory, card capture, authentication, email delivery, backend APIs, genuine customer data, automatic creation of a Statsig completed-result history, production ownership of Webjet assets.

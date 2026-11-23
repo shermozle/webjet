@@ -1,0 +1,59 @@
+name: Statsig synthetic traffic until Friday demo
+on:
+  schedule:
+    # Offset from the top of the hour to reduce scheduled-run congestion.
+    - cron: '7,22,37,52 * * * *'
+  workflow_dispatch:
+    inputs:
+      users:
+        description: 'Synthetic visitors (1–240; normal run = 120)'
+        required: false
+        default: '120'
+permissions:
+  contents: read
+  actions: write
+concurrency:
+  group: statsig-webjet-synthetic
+  cancel-in-progress: false
+jobs:
+  traffic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Do not replay a partially delivered run; the next scheduled run supplies new users.
+    if: github.run_attempt == 1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check traffic deadline
+        id: window
+        run: |
+          node --input-type=module <<'JS'
+          import {readFileSync,appendFileSync} from 'node:fs';
+          const config=JSON.parse(readFileSync('data/statsig-synthetic-config.json','utf8'));
+          appendFileSync(process.env.GITHUB_OUTPUT,`active=${Date.now()<Date.parse(config.stopAt)}\n`);
+          JS
+      - name: Disable this schedule when the traffic window ends
+        if: steps.window.outputs.active != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow disable statsig-synthetic.yml --repo "$GITHUB_REPOSITORY"
+      - uses: actions/setup-node@v4
+        if: steps.window.outputs.active == 'true'
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+        if: steps.window.outputs.active == 'true'
+      - run: node --test tests/statsig-traffic.test.mjs
+        if: steps.window.outputs.active == 'true'
+      - name: Generate current-time synthetic events through the real Statsig SDK
+        if: steps.window.outputs.active == 'true'
+        env:
+          TRAFFIC_USERS: ${{ inputs.users || '120' }}
+        run: node scripts/statsig-traffic.mjs --send --users "$TRAFFIC_USERS"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.window.outputs.active == 'true'
+        with:
+          name: statsig-traffic-${{ github.run_id }}
+          path: data/generated/statsig-traffic-report.json
+          retention-days: 14
+          if-no-files-found: warn

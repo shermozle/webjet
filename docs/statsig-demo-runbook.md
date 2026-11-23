@@ -2,14 +2,14 @@
 
 ## Readiness
 
-- Website: http://localhost:5173/?page=home (or the deployed Pages URL).
+- Website: https://shermozle.github.io/webjet/?page=home.
 - Open Statsig beside the website.
 - Enter the Webjet public client key under Demo → SDK and reload.
 - Confirm the intended project, environment and experiment before launching anything.
 - The site is connected to the new [SR] Webjet project via its public client key; the MCP target remains read-only Amplitronics.
 - Both analytics providers stay on. Choose the banner provider in Demo → SDK and reload.
 - To demonstrate Amplitude Web Experiment, use `?page=home&experimentProvider=amplitude` as the editor starting URL.
-- Keep a prepared results example clearly identified as another experiment, not Webjet customer data.
+- Use `webjet_friday_synthetic_checkout` for Friday’s results walkthrough. It is explicitly synthetic; keep `webjet_landing_confidence` for interactive banner QA.
 
 ## 1. Custom metrics and page tracking — 3 minutes
 
@@ -17,7 +17,7 @@ Start on the landing page. Explain the business question: does a clearer value a
 
 Statsig autocapture provides `auto_capture::page_view`, `auto_capture::page_view_end`, `auto_capture::session_start` and Web Vitals. Precision events represent business intent and outcomes. The SDK handles session identity. No hand-written pageview/session events duplicate these.
 
-Suggested metrics:
+Configured metrics (the first, second and fourth rows below):
 
 | Metric | Definition | Direction |
 |---|---|---|
@@ -46,12 +46,12 @@ For measurement, keep eligibility stable and distinguish targeting from reportin
 
 ## 3. Banner swap, forced variants, QA, publish, pause — 4 minutes
 
-A standard Statsig draft named `webjet_landing_confidence` is created with these saved parameters. It still needs metrics and activation:
+The active Statsig experiment `webjet_landing_confidence` has these saved parameters and all three conversion/guardrail metrics attached:
 
 | Group | Allocation | Parameter |
 |---|---|---|
 | Control | 50% | banner = control |
-| Value & confidence | 50% | banner = value |
+| Test (value & confidence) | 50% | banner = value |
 
 Control heading: Your next adventure starts here.
 Treatment heading: Less searching. More going.
@@ -110,15 +110,11 @@ For the real console walkthrough, define eligibility and a holdout in Statsig if
 
 ## Results strategy
 
-A complete historical Webjet result is **not available in Statsig** from this build. The old synthetic data was made for Amplitude. Do not upload it blindly to Statsig or change timestamps to disguise it as current traffic.
+The separate active experiment `webjet_friday_synthetic_checkout` receives prospective synthetic traffic through GitHub Actions every 15 minutes. It targets only `data_source = github_actions_synthetic`, so ordinary website visitors cannot enter it. The script never evaluates the interactive experiment.
 
-Fast path: show the Webjet workflow live and explain a pre-populated Statsig example separately.
+Open its Results tab on Friday. Check data freshness, sample balance, the primary checkout metric and guardrails before using Make Decision. The model intends 20% versus 22% checkout conversion (+2 percentage points, +10% relative); observed results fluctuate and statistical significance is not promised. Describe any uplift as **simulated demo outcomes**, never Webjet customer evidence.
 
-With time: start the intended Statsig demo experiment and generate explicitly labelled synthetic interactions prospectively using actual SDK evaluations; allow processing. Check group balance and ensure outcome events follow exposure with the same user ID. Avoid overrides when generating analysis traffic.
-
-Warehouse Native path: use a separate synthetic dataset containing assignment timestamps, user IDs, variants and subsequent conversion events; configure experiment/metric sources and reload analysis. This requires a warehouse and appropriate project, neither supplied here.
-
-A reasonable synthetic scenario to prepare is 20% versus 22% checkout conversion (+2 percentage points; +10% relative). Label it illustrative. Do not call it a measured Webjet uplift.
+The schedule stops Thursday 26 November at 18:00 AEDT, allowing overnight metric processing before the assumed Friday 09:00 demo. Traffic stopping does not automatically make a Statsig decision. See [synthetic traffic controls](synthetic-traffic.md) for workflow links, receipts, deadlines and troubleshooting.
 
 ## Official references checked at pivot
 
