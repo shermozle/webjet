@@ -22,3 +22,5 @@ export function startAmplitude(record:(event:string,properties:Record<string,unk
   }).then(()=>identifyAmplitude(read())).catch(()=>{record('Amplitude setup unavailable',{source:'local diagnostics'})});
 }
 export function trackAmplitude(event:string,properties:Record<string,unknown>){amplitude.track(event,properties)}
+
+export function flushAmplitude(){return amplitude.flush().promise}

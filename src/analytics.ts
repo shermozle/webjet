@@ -1,4 +1,4 @@
-import {startAmplitude,identifyAmplitude,trackAmplitude} from './amplitude-bridge';
+import {startAmplitude,identifyAmplitude,trackAmplitude,flushAmplitude} from './amplitude-bridge';
 import {StatsigClient} from '@statsig/js-client';
 import {StatsigAutoCapturePlugin} from '@statsig/web-analytics';
 import {read, type State, experience} from './model';
@@ -63,4 +63,9 @@ export function feature(key:string,fallback:string){
   decisions.set(key,variant);
   record('Statsig experiment evaluated',{experiment:key,group:result.groupName,variant,reason:result.details.reason});
   return variant;
+}
+
+// Give both SDKs a bounded flush before full-page navigation on static hosting.
+export async function flushEvents(){
+  await Promise.race([(async()=>{await ready;await Promise.allSettled([flushAmplitude(),client?.flush()])})(),new Promise<void>(resolve=>setTimeout(resolve,1500))]);
 }

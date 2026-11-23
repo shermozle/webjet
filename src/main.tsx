@@ -2,11 +2,11 @@ import React, {useState,useEffect,useRef} from 'react';
 import {createRoot} from 'react-dom/client';
 import {Plane,Hotel,Package,Car,Compass,Headphones,UserRound,ShoppingCart,ArrowRight,ArrowLeft,ArrowLeftRight,Check,ChevronDown,Settings2,X,ShieldCheck,Luggage,Armchair,CalendarDays,SlidersHorizontal,Heart,MapPin,Menu,CheckCircle2,Info,Tag,Globe,RotateCcw,ExternalLink} from 'lucide-react';
 import {read,save,fresh,STORAGE,cities,flights,extras,totals,money,experience,type State,type Persona,type Flight} from './model';
-import {track,identify,log,ready,feature,connection} from './analytics';
+import {track,identify,log,ready,feature,connection,flushEvents} from './analytics';
 import './style.css';
 const page=new URLSearchParams(location.search).get('page')||'home';
 const href=(p:string)=>`?page=${p}`;
-const go=(p:string)=>{location.href=href(p)};
+const go=async(p:string)=>{await flushEvents();location.href=href(p)};
 const names:Record<string,string>={home:'Flights & travel deals',deals:'Flight deals',results:'Choose your flights',extras:'Make it your trip',checkout:'Complete your booking',confirmation:'You’re going places',hotels:'Find your perfect stay',packages:'A holiday, all together',account:'Your trips',support:'How can we help?'};
 document.title=`${names[page]||'Travel'} | Webjet Demo`;
 function App(){
