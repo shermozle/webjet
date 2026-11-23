@@ -1,0 +1,14 @@
+{
+  "projectId": 915629,
+  "apiKey": "63c5f7edb9bfae15645e90118db97575",
+  "flagKey": "webjet-or-landing-page-confidence-completed-bookings-synthetic-demo",
+  "experimentKey": "",
+  "name": "Webjet | Landing page confidence → completed bookings (synthetic demo)",
+  "start": "2026-10-26T00:00:00+11:00",
+  "end": "2026-11-22T23:59:59+11:00",
+  "usersPerVariant": 6000,
+  "variants": {"control":{"checkoutRate":0.20,"bookingRate":0.08},"treatment":{"checkoutRate":0.22,"bookingRate":0.096}},
+  "batchId": "webjet-landing-2026-11-v1",
+  "siteUrl": "http://localhost:5173/",
+  "synthetic": true
+}

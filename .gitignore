@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env.local
+data/generated/
+*.log
+
+outputs/*.jpg
+outputs/*.png

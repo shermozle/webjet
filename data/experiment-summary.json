@@ -1,0 +1,23 @@
+{
+  "synthetic": true,
+  "batchId": "webjet-landing-2026-11-v1",
+  "start": "2026-10-26T00:00:00+11:00",
+  "end": "2026-11-22T23:59:59+11:00",
+  "eventCount": 79502,
+  "counts": {
+    "control": {
+      "users": 6000,
+      "checkouts": 1200,
+      "bookings": 480,
+      "bookingRate": 0.08
+    },
+    "treatment": {
+      "users": 6000,
+      "checkouts": 1320,
+      "bookings": 576,
+      "bookingRate": 0.096
+    }
+  },
+  "relativeLift": 0.19999999999999996,
+  "absoluteLift": 0.016
+}

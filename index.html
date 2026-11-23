@@ -1,0 +1,13 @@
+<!doctype html><html lang="en-AU"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><meta name="robots" content="noindex,nofollow"/><script>
+// Select one DOM experiment engine before application rendering. Analytics stays dual.
+try {
+  var state = JSON.parse(localStorage.getItem('webjet-demo-v1') || '{}');
+  var requested = new URLSearchParams(location.search).get('experimentProvider');
+  var provider = requested === 'amplitude' || requested === 'statsig' ? requested : (state.settings || {}).experimentProvider;
+  if (requested && state.version === 1) {
+    state.settings.experimentProvider = provider;
+    localStorage.setItem('webjet-demo-v1', JSON.stringify(state));
+  }
+  if (provider === 'amplitude') document.write('<script src="https://cdn.amplitude.com/script/63c5f7edb9bfae15645e90118db97575.experiment.js"><\/script>');
+} catch (e) { /* Storage restrictions do not block the demo. */ }
+</script><title>Webjet | Your next trip starts here</title></head><body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>

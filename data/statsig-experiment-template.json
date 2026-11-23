@@ -1,0 +1,11 @@
+{
+  "name": "webjet_landing_confidence",
+  "description": "Synthetic Webjet demo: clearer landing-page reassurance increases checkout conversion. No actual customer outcomes.",
+  "hypothesis": "A value and confidence banner increases exposed visitors reaching checkout without increasing payment failures.",
+  "idType": "userID",
+  "allocation": 100,
+  "groups": [
+    {"name": "Control", "size": 50, "parameterValues": {"banner": "control"}},
+    {"name": "Value & confidence", "size": 50, "parameterValues": {"banner": "value"}}
+  ]
+}

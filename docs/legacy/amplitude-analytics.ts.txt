@@ -1,0 +1,24 @@
+import * as amplitude from '@amplitude/unified';
+import {Experiment, type ExperimentClient} from '@amplitude/experiment-js-client';
+import {read, type State, experience} from './model';
+export type LogEntry={event:string;properties:Record<string,unknown>;time:string};
+export const log:LogEntry[]=[];
+const current=read();
+const audience=(s:State)=>({traveller_type:s.persona,member_status:s.loggedIn?'Member':'Guest',home_airport:s.search.from,preferred_destination:s.search.to,booking_count:s.bookings.length,demo_environment:true,data_source:'website',qa_preview:experience(s).qa});
+// One analytics instance. Page views and sessions belong exclusively to autocapture.
+amplitude.add({name:'webjet-context',type:'enrichment',setup:async()=>{},execute:async(event)=>{const s=read();event.event_properties={...audience(s),page_name:new URLSearchParams(location.search).get('page')||'home',...event.event_properties};log.unshift({event:event.event_type,properties:event.event_properties,time:new Date().toLocaleTimeString()});log.splice(80);window.dispatchEvent(new Event('webjet-event'));return event;}});
+export let localExperiment:ExperimentClient|undefined;
+export const ready=amplitude.initAll(current.settings.apiKey,{
+ analytics:{autocapture:{pageViews:{trackHistoryChanges:'all'},sessions:true,attribution:true,elementInteractions:false,fileDownloads:false,formInteractions:false},identityStorage:'localStorage',flushIntervalMillis:1000},
+ sessionReplay:{sampleRate:current.settings.replay?1:0,privacyConfig:{defaultMaskLevel:'medium',maskSelector:['[data-private]']}},
+ engagement:{skip:!current.settings.guides},
+ experiment:current.settings.deploymentKey?{deploymentKey:current.settings.deploymentKey}:undefined
+}).then(async()=>{
+ identify(read());
+ if(current.settings.deploymentKey)await amplitude.experiment()?.fetch().catch(()=>{});
+ if(current.settings.localKey){localExperiment=Experiment.initializeWithAmplitudeAnalytics(current.settings.localKey,{fetchOnStart:true,pollOnStart:true,automaticExposureTracking:true});await localExperiment.start().catch(()=>{});}
+}).catch(e=>console.warn('Amplitude setup unavailable; demo remains usable.',e));
+export function identify(s:State){amplitude.setUserId('webjet-demo-'+s.visitorId);const id=new amplitude.Identify();for(const [k,v]of Object.entries(audience(s)))id.set(k,v);amplitude.identify(id)}
+export function track(event:string,properties:Record<string,unknown>={}){const s=read();amplitude.track(event,{product_type:'Flights',destination:s.search.to,origin:s.search.from,trip_type:s.search.trip,travellers:s.search.travellers,currency:'AUD',...properties})}
+export function feature(key:string,fallback:string){return localExperiment?.variant(key).value||amplitude.experiment()?.variant(key).value||fallback}
+export {amplitude};

@@ -1,0 +1,7 @@
+Events with higher dropoff and a conversion driver,Conversion Rate,Conversion Driver,Correlation
+"Create Account,Add Integrations",70%,Custom Event 1,Strong Positive
+"Follow Opportunity,View Campaign",48%,Custom Event 1,Medium Positive
+"View Campaign,Renew Subscription",38%,Contact Sales,Strong Positive
+"Sign Up Free Trial,Complete Free Trial",32%,View Pop-up Window,Medium Positive
+"Add Integrations,Follow Opportunity",52%,Create Opportunity,Strong Positive
+"Request Premium Subscription,Renew Subscription",92%,View Account Alert,Medium Positive
