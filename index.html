@@ -8,6 +8,19 @@ try {
     state.settings.experimentProvider = provider;
     localStorage.setItem('webjet-demo-v1', JSON.stringify(state));
   }
-  if (provider === 'amplitude') document.write('<script src="https://cdn.amplitude.com/script/63c5f7edb9bfae15645e90118db97575.experiment.js"><\/script>');
+  if (provider === 'amplitude') {
+    // Amplitude's documented anti-flicker mask is removed by Web Experiment
+    // after applying changes, or by the bounded failure fallback below.
+    var mask = document.createElement('style');
+    mask.id = 'amp-exp-css';
+    mask.textContent = '#landing-hero, #landing-hero * { visibility: hidden !important; }';
+    document.head.appendChild(mask);
+    window.setTimeout(function () { mask.remove(); }, 3500);
+    var script = document.createElement('script');
+    script.src = 'https://cdn.amplitude.com/script/63c5f7edb9bfae15645e90118db97575.experiment.js';
+    script.async = true;
+    script.onerror = function () { mask.remove(); };
+    document.head.appendChild(script);
+  }
 } catch (e) { /* Storage restrictions do not block the demo. */ }
 </script><title>Webjet | Your next trip starts here</title></head><body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>

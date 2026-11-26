@@ -17,7 +17,7 @@ function record(event:string, properties:Record<string,unknown>){
   window.dispatchEvent(new Event('webjet-event'));
 }
 const amplitudeReady = startAmplitude(record);
-const statsigReady = (async()=>{
+export const statsigReady = (async()=>{
   if(!initial.settings.statsigKey.startsWith('client-'))return;
   client = new StatsigClient(initial.settings.statsigKey,user(initial),{
     environment:{tier:initial.settings.statsigEnvironment},
