@@ -1,4 +1,4 @@
-# Friday Statsig results demo
+# Webjet Statsig synthetic traffic
 
 This is explicitly simulated traffic, not Webjet customer evidence. It uses actual current timestamps and Statsig SDK assignments; it is not a historical backfill.
 
@@ -12,9 +12,9 @@ This is explicitly simulated traffic, not Webjet customer evidence. It uses actu
 
 ## Schedule and isolation
 
-The synthetic experiment started Monday 23 November 2026, 11:19 AEDT. Each GitHub Actions run introduces 120 unique synthetic users. Runs are scheduled at minutes 7, 22, 37 and 52 of every hour, allowing about 38,000 visitors by Thursday evening if all runs execute on time. GitHub schedules can be delayed or skipped, so this is an estimate.
+The synthetic experiment started Monday 23 November 2026, 11:19 AEDT. Each GitHub Actions run introduces 120 unique synthetic users. Runs are scheduled at minutes 7, 22, 37 and 52 of every hour (120 visitors per run). GitHub schedules can be delayed or skipped.
 
-Traffic stops **Thursday 26 November 2026 at 18:00 AEDT**. The next scheduled invocation disables this workflow; the script independently enforces the deadline. Friday **27 November, 09:00 AEDT** is the assumed review time. The experiment stays active until the presenter makes a decision in Statsig.
+Traffic now stops **Wednesday 23 December 2026 at 18:00 AEDT (07:00 UTC)**. The next scheduled invocation disables this workflow; the script independently enforces the deadline. The original November cutoff was extended on 27 November and the previously disabled workflow was re-enabled. The original review time remains recorded as Friday 27 November at 09:00 AEDT; it does not control traffic. Experiment lifecycle remains controlled in Statsig.
 
 The experiment targets only the custom field `data_source = github_actions_synthetic`. It splits eligible userIDs 50/50 into Control (`banner=control`) and Test (`banner=value`). The website evaluates only `webjet_landing_confidence`; this generator evaluates only `webjet_friday_synthetic_checkout`. Synthetic IDs start with `webjet-synthetic-` and all events carry source, run and simulation labels.
 

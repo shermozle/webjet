@@ -4,7 +4,7 @@
   "experiment": "webjet_friday_synthetic_checkout",
   "usersPerRun": 120,
   "maxUsersPerRun": 240,
-  "stopAt": "2026-11-26T18:00:00+11:00",
+  "stopAt": "2026-12-23T18:00:00+11:00",
   "reviewAt": "2026-11-27T09:00:00+11:00",
   "siteUrl": "https://shermozle.github.io/webjet/",
   "source": "github_actions_synthetic",

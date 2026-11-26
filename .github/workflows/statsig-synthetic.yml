@@ -1,4 +1,4 @@
-name: Statsig synthetic traffic until Friday demo
+name: Statsig synthetic traffic until 23 December
 on:
   schedule:
     # Offset from the top of the hour to reduce scheduled-run congestion.

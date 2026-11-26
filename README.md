@@ -43,7 +43,7 @@ Verified on the published site: real Statsig Control assignment (`Network:Recogn
 
 Statsig Cloud does not ordinarily backfill already-computed historical metric days. Send events with their actual occurrence times. The first 24 hours of a new Cloud experiment have hourly scorecard calculations, but this is not an immediate-result promise or a completed result.
 
-A separate active experiment, `webjet_friday_synthetic_checkout`, receives clearly labelled synthetic visitors through GitHub Actions every 15 minutes until Thursday 26 November, 18:00 Sydney time. Its intended scenario is 20% versus 22% checkout conversion. Review Statsig’s computed results on Friday 27 November; significance and processing time are not guaranteed. See [traffic controls and results guidance](docs/synthetic-traffic.md).
+A separate active experiment, `webjet_friday_synthetic_checkout`, receives clearly labelled synthetic visitors through GitHub Actions every 15 minutes until Wednesday 23 December 2026, 18:00 Sydney time. Its intended scenario is 20% versus 22% checkout conversion. Review Statsig’s computed results on Friday 27 November; significance and processing time are not guaranteed. See [traffic controls and results guidance](docs/synthetic-traffic.md).
 
 The older Amplitude/TurboDemo assets remain in `data/` and `scripts/` for reuse. They are **not Statsig import formats**. The Amplitude upload was stopped on the pivot; the checkpoint records 78,400 accepted events. The batch is incomplete and the draft Amplitude experiment was not completed. Do not resume `scripts/backfill.mjs --send` for this Statsig demo.
 

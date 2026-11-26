@@ -114,7 +114,7 @@ The separate active experiment `webjet_friday_synthetic_checkout` receives prosp
 
 Open its Results tab on Friday. Check data freshness, sample balance, the primary checkout metric and guardrails before using Make Decision. The model intends 20% versus 22% checkout conversion (+2 percentage points, +10% relative); observed results fluctuate and statistical significance is not promised. Describe any uplift as **simulated demo outcomes**, never Webjet customer evidence.
 
-The schedule stops Thursday 26 November at 18:00 AEDT, allowing overnight metric processing before the assumed Friday 09:00 demo. Traffic stopping does not automatically make a Statsig decision. See [synthetic traffic controls](synthetic-traffic.md) for workflow links, receipts, deadlines and troubleshooting.
+The traffic schedule was extended after the Friday demo and now stops Wednesday 23 December 2026 at 18:00 AEDT (Sydney). The workflow disables itself on its first invocation after that cutoff. Traffic stopping does not automatically make a Statsig decision. See [synthetic traffic controls](synthetic-traffic.md) for workflow links, receipts, deadlines and troubleshooting.
 
 ## Official references checked at pivot
 
